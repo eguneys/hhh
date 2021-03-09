@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "outDir": "../dist/test",
+    "sourceMap": true,
+    "module": "es6",
+    "target": "es5",
+    "baseUrl": "../",
+    "declaration": true,
+    "plugins": [
+      {
+        "transform": "typescript-transform-extensions",
+        "extensions": { ".ts": ".js" }
+      }
+    ]
+  },
+  "references": [
+    { "path": "../src" }
+  ],
+  "files": [
+    "test.ts",
+    "util.ts"
+  ]
+}
