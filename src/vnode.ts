@@ -8,7 +8,10 @@ export interface VNode {
   text: Maybe<string>  
 }
 
+export type Attrs = Record<string, string | number | boolean>
+
 export interface VNodeData {
+  attrs?: Attrs
 }
 
 export function vnode(sel: Maybe<string>,

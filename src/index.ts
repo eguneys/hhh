@@ -1,1 +1,4 @@
-export * as h from './h';
+export * from './h';
+export * from './vnode';
+export * from './init';
+

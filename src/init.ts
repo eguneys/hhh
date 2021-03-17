@@ -17,12 +17,29 @@ export function init() {
     }
 
     let [tagname, ...klass] = sel.split('.');
-    $d = api.createElement(tagname, data);
+    $d = api.createElement(tagname);
 
     klass.forEach(_ => {
       let elm: Element = $d as Element;
       elm.classList.add(_)
     });
+
+    if (data?.attrs) {
+      let elm: Element = $d as Element;
+      for (let key in data.attrs) {
+        let attr = data.attrs[key];
+        if (attr === true) {
+          elm.setAttribute(key, '');
+        } else {
+          elm.setAttribute(key, attr as any);
+        }
+      }
+    }
+
+    if (text) {
+      $dc = document.createTextNode(text);
+      $d.appendChild($dc);
+    }
 
     if (children) {
       for (let vc of children) {

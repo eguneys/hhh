@@ -8,9 +8,8 @@
   "scripts": {
     "start": "webpack serve --open",
     "build": "rm -rf dist && ttsc --build test/tsconfig.json",
-    "unit": "http-server test-bundles -p3000",
-    "test": "yarn build && yarn bundle-tests && yarn unit",
-    "bundle-tests": "webpack"
+    "test": "yarn build && yarn bundle-tests",
+    "bundle-tests": "webpack serve --open"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
@@ -31,6 +30,14 @@
   },
   "files": [
     "/dist/src/h.d.ts",
-    "/dist/src/h.js"
+    "/dist/src/h.js",
+    "/dist/src/vnode.d.ts",
+    "/dist/src/vnode.js",
+    "/dist/src/is.d.ts",
+    "/dist/src/is.js",
+    "/dist/src/init.d.ts",
+    "/dist/src/init.js",
+    "/dist/src/htmldomapi.d.ts",
+    "/dist/src/htmldomapi.js"
   ]
 }
