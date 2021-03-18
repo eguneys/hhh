@@ -1,23 +1,11 @@
 {
   "compilerOptions": {
-    "outDir": "../dist/test",
+    "strict": true,
+    "incremental": true,
     "sourceMap": true,
-    "module": "es6",
-    "target": "es5",
-    "baseUrl": "../",
-    "declaration": true,
-    "plugins": [
-      {
-        "transform": "typescript-transform-extensions",
-        "extensions": { ".ts": ".js" }
-      }
-    ]
+    "moduleResolution": "node",
   },
   "references": [
     { "path": "../src" }
-  ],
-  "files": [
-    "test.ts",
-    "util.ts"
   ]
 }

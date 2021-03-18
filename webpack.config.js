@@ -3,36 +3,33 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './dist/test/test.js',
+  entry: './test/test.ts',
   devServer: {
-    static: [path.resolve(__dirname, 'test-bundles')],
+    static: [path.resolve(__dirname, 'lib')],
     host: '0.0.0.0',
     port: '3000'  
   },
   output: {
-    path: path.resolve(__dirname, 'test-bundles'),
+    path: path.resolve(__dirname, 'lib'),
     filename: '[name].bundle.js',
     clean: true
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'kcapeW',
+      title: 'hhh',
       template: 'test/index.html'
     }),
   ],
   module: {
     rules: [{
-      test: /\.m?js$/,
+      test: /\.ts$/,
       use: {
-        loader: 'babel-loader',
-        options: {
-          presets: [
-            [
-              '@babel/preset-env'
-            ]
-          ]
-        }
-      }
+        loader: 'ts-loader',
+      },
+      exclude: /node_modules/
     }]
+  },
+  resolve: {
+    extensions: ['.ts', '.js']
   }
 };

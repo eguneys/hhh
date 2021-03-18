@@ -2,14 +2,11 @@
   "name": "hhh",
   "version": "1.0.0",
   "license": "MIT",
-  "type": "module",
-  "main": "dist/src/index.js",
-  "typings": "dist/src/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "start": "webpack serve --open",
-    "build": "rm -rf dist && ttsc --build test/tsconfig.json",
-    "test": "yarn build && yarn bundle-tests",
-    "bundle-tests": "webpack serve --open"
+    "build": "rm -rf lib && tsc --project src"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
@@ -27,17 +24,5 @@
     "webpack": "^5.24.4",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "4.0.0-beta.0"
-  },
-  "files": [
-    "/dist/src/h.d.ts",
-    "/dist/src/h.js",
-    "/dist/src/vnode.d.ts",
-    "/dist/src/vnode.js",
-    "/dist/src/is.d.ts",
-    "/dist/src/is.js",
-    "/dist/src/init.d.ts",
-    "/dist/src/init.js",
-    "/dist/src/htmldomapi.d.ts",
-    "/dist/src/htmldomapi.js"
-  ]
+  }
 }

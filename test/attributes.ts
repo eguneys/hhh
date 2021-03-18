@@ -1,5 +1,4 @@
-import { qed } from './util2';
-import { it } from './util';
+import { qed, it } from 'tiqed';
 import { VNode } from '../src/vnode';
 import { h } from '../src/h';
 import { init } from '../src/init';

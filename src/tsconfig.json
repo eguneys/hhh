@@ -3,23 +3,7 @@
     "composite": true,
     "strict": true,
     "incremental": true,
-    "outDir": "../dist/src",
-    "module": "es6",
-    "target": "es5",
-    "declaration": true,
-    "plugins": [
-      {
-        "transform": "typescript-transform-extensions",
-        "extensions": { ".ts": ".js" }
-      }
-    ]
-  },
-  "files": [
-    "index.ts",
-    "h.ts",
-    "vnode.ts",
-    "is.ts",
-    "init.ts",
-    "htmldomapi.ts"
-  ]
+    "outDir": "../lib",
+    "declaration": true
+  }
 }

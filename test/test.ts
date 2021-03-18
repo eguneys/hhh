@@ -1,11 +1,14 @@
-import { run } from './util';
+import { tMo, run } from 'tiqed';
 
 import core from "./core";
 import attributes from "./attributes";
+import hooks from './hooks';
 
 (() => {
-  core();
-  attributes();
+
+  tMo(core);
+  tMo(attributes);
+  tMo(hooks);
 
   run();
 })();

@@ -19,6 +19,8 @@ export function init() {
     let [tagname, ...klass] = sel.split('.');
     $d = api.createElement(tagname);
 
+    vnode.elm = $d;
+
     klass.forEach(_ => {
       let elm: Element = $d as Element;
       elm.classList.add(_)
@@ -46,6 +48,11 @@ export function init() {
         $dc = reconcile(vc);
         api.appendChild($d, $dc);
       }
+    }
+
+    const hook = vnode.data?.hook;
+    if (hook) {
+      hook.create?.(vnode);
     }
 
     return $d;
