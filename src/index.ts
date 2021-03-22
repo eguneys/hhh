@@ -1,4 +1,2 @@
-export * from './h';
-export * from './vnode';
-export * from './init';
-
+export * from './vh';
+export * from './vinit';

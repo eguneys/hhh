@@ -9,13 +9,13 @@ export default function attributes() {
   let elm: any;
 
 
-  it('have their provided values', () => {
+  // it('have their provided values', () => {
 
-    let vnode = h('div', { attrs: { href: '/foo', selected: true } });
+  //   let vnode = h('div', { attrs: { href: '/foo', selected: true } });
 
-    elm = reconcile(vnode);
+  //   elm = reconcile(vnode);
 
-    qed('attr href: /foo', elm.getAttribute('href'), '/foo');
-  });
+  //   qed('attr href: /foo', elm.getAttribute('href'), '/foo');
+  // });
   
 }

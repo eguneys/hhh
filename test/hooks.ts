@@ -10,29 +10,29 @@ export default function hooks() {
 
   it('hooks');
 
-  it('calls hook on create', () => {
+  // it('calls hook on create', () => {
 
-    let result = [];
+  //   let result = [];
 
-    const cb: CreateHook = (vnode) => {
-      yes(vnode.elm instanceof Element);
+  //   const cb: CreateHook = (vnode) => {
+  //     yes(vnode.elm instanceof Element);
 
-      qed('ok', (vnode.elm as Element).children.length, 2);
-      qed('ok', vnode.elm?.parentNode === null, true);
-      result.push(vnode);
-    };
+  //     qed('ok', (vnode.elm as Element).children.length, 2);
+  //     qed('ok', vnode.elm?.parentNode === null, true);
+  //     result.push(vnode);
+  //   };
 
-    const vnode = h('div', [
-      h('div', { hook: { create: cb } }, [
-        h('span'),
-        h('span')
-      ])
-    ])
-    reconcile(vnode);
+  //   const vnode = h('div', [
+  //     h('div', { hook: { create: cb } }, [
+  //       h('span'),
+  //       h('span')
+  //     ])
+  //   ])
+  //   reconcile(vnode);
 
-    qed('called', result.length, 1);
+  //   qed('called', result.length, 1);
 
-  });
+  // });
 
 
   
