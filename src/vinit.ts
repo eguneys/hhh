@@ -9,20 +9,22 @@ export function vinit() {
   function updateChildren<A>([arr,
                               oldArray]: [Array<A>, Array<A>], 
                              mf: (_: A) => VHNode,
+                             fprop: (_: A) => VProp,
                              children: Map<VHNode, Node>,
                              $parent: Node) {
-    let { added, removed, still } = diff.array(arr, oldArray);
+
+    let { added, removed, still } = diff.array(arr.map(fprop), oldArray.map(fprop));
 
     let recycle: Array<VHNode> = [];
 
-    removed.forEach((_: A) => {
+    removed.forEach((_: VProp) => {
       let _$ = Array.from(children.keys()).find((_v$: VHNode) => _v$.prop === _);
       if (_$) {
         recycle.push(_$);
       }
     });
 
-    added.forEach((_: A) => {
+    added.forEach((_: VProp) => {
       let v$ = recycle.pop();
       if (v$) {
         v$.update(_);
@@ -56,12 +58,12 @@ export function vinit() {
   }
 
   function updateVChildren<A>(children: VChildren<A>, $parent: Node) {
-    let { updatePair, mf, data } = children;
+    let { updatePair, mf, fprop, data } = children;
 
     let cmap: Map<VHNode, Node> = new Map();
 
     children.update = (data) => {
-      updateChildren(updatePair.add(data), mf, cmap, $parent);
+      updateChildren(updatePair.add(data), mf, fprop, cmap, $parent);
     }
 
     children.forEach = (fn) => {
@@ -76,6 +78,15 @@ export function vinit() {
     let $_ = recons(child);
     $parent.appendChild($_);
 
+  }
+
+  function propCombine(oprop: VProp, prop: VProp): VProp {
+    if (typeof oprop === 'object') {
+      if (typeof prop === 'object') {
+        return { ...oprop, ...prop };
+      }
+    }
+    return prop;
   }
 
   function recons(vh: VHNode) {
@@ -98,7 +109,7 @@ export function vinit() {
 
     vh.update = (_prop: VProp) => {
 
-      vh.prop = _prop;
+      vh.prop = propCombine(vh.prop, _prop);
       updates.element?.(vh.prop)($d);
 
       if (updates.klassList) {

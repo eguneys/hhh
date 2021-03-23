@@ -18,13 +18,15 @@ export declare type Sel = string;
 export declare type Text = {
     text: string;
 };
+export declare type VHNodeOrChildren = VHNode | VChildren<any>;
+export declare function isVHNode(_: VHNodeOrChildren): _ is VHNode;
 export interface VHNode {
     selOrText: Sel | Text;
     prop: VProp;
     updates: VUpdates;
     updatePairs: VUpdatePairs;
     update: (_: VProp) => void;
-    children?: VChildren<any>;
+    children: Array<VHNodeOrChildren>;
 }
 export interface VChildren<A> {
     data: Array<A>;
@@ -34,4 +36,4 @@ export interface VChildren<A> {
     update: (_: Array<A>) => void;
 }
 export declare function vmap<A>(data: Array<A>, mf: (_: A) => VHNode): VChildren<A>;
-export declare function vh(selOrText: Sel | Text, prop: VProp, updates: VUpdates, children?: VChildren<any>): VHNode;
+export declare function vh(selOrText: Sel | Text, prop: VProp, updates: VUpdates, children?: Array<VHNodeOrChildren>): VHNode;

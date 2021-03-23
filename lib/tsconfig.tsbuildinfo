@@ -166,14 +166,14 @@
         "signature": "96a0f02453b5f965d3900ef677b34f4b972eee9ac5b677818b8a584557399b0b",
         "affectsGlobalScope": false
       },
-      "../src/vnode.ts": {
-        "version": "4e068a1c02ae922da507c5bae64018df3b3904ac25f6562532fc01563af1ad81",
-        "signature": "3a5e9c73aacba6d20df8d5480af8577b42599eb0df86ab3861695cd51163cfc0",
+      "../src/vh.ts": {
+        "version": "d8e3f868944cb7268068b566c5131b3b3cc0e1ab96d0f05c97df04d8d7c535a3",
+        "signature": "e3104c9adddf6d9e865c545d3efded8dc0fa2769bc2491191d8ec55dbce699e4",
         "affectsGlobalScope": false
       },
       "../src/h.ts": {
-        "version": "3aa89ac8fc1da85fb9e1408d179d4285f241ddc081280fcf27151e12a41c6c94",
-        "signature": "63d8641e2ec86ae60195180993d4479dbaa4ad7cc50006a176ff3e4539267539",
+        "version": "b5c1595d97cfb895bdbbee9d2e841a7bba724e9646a9a27e6ab124e2165cb04c",
+        "signature": "f2488bad99a96ee3fb665c829224bd5b4b6a77186d8a4a5583d3b522e7791a08",
         "affectsGlobalScope": false
       },
       "../src/htmldomapi.ts": {
@@ -181,19 +181,19 @@
         "signature": "f9c5ced0f9b5c96e7bc2b95e3159d507191dd87e22b34f6e7f4c836f15e6d26d",
         "affectsGlobalScope": false
       },
-      "../src/vh.ts": {
-        "version": "71b8bada7f1e1f5058ce321055bb77d363b30c498286e09f018d2ae03940e77e",
-        "signature": "f9d90dcd028bd218cfbb5ee4d698f0017061606b132ebc286a1b5d69279190cd",
-        "affectsGlobalScope": false
-      },
       "../src/vinit.ts": {
-        "version": "9d4d690a60a9f0655e662792fc48a9d07dd93edbc8391c0b77f32f9168a151e5",
+        "version": "1cd0fd801e33cdd5c257d0c33ea016cee8d420fe1f3b4e9e90cd236cb272be99",
         "signature": "1752df558b466f9336bc6c9091847f79f2d4331ba5b3f0d14a1f8bf60ff08c7d",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
-        "version": "ffd8fa783e4b89ee1c981b8c19e6be5149f7af30b08406568440c1f43bc157c8",
-        "signature": "ffd8fa783e4b89ee1c981b8c19e6be5149f7af30b08406568440c1f43bc157c8",
+        "version": "c942676cd0158c6e3019295630099035737b767af889e3ee794e9074f84a3d49",
+        "signature": "c942676cd0158c6e3019295630099035737b767af889e3ee794e9074f84a3d49",
+        "affectsGlobalScope": false
+      },
+      "../src/vnode.ts": {
+        "version": "4e068a1c02ae922da507c5bae64018df3b3904ac25f6562532fc01563af1ad81",
+        "signature": "3a5e9c73aacba6d20df8d5480af8577b42599eb0df86ab3861695cd51163cfc0",
         "affectsGlobalScope": false
       },
       "../src/init.ts": {
@@ -743,9 +743,10 @@
       ],
       "../src/h.ts": [
         "../src/is.ts",
-        "../src/vnode.ts"
+        "../src/vh.ts"
       ],
       "../src/index.ts": [
+        "../src/h.ts",
         "../src/vh.ts",
         "../src/vinit.ts"
       ],
@@ -1010,9 +1011,10 @@
         "../node_modules/@types/node/zlib.d.ts"
       ],
       "../src/h.ts": [
-        "../src/vnode.ts"
+        "../src/vh.ts"
       ],
       "../src/index.ts": [
+        "../src/h.ts",
         "../src/vh.ts",
         "../src/vinit.ts"
       ],

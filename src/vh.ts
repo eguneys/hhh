@@ -50,15 +50,18 @@ export interface VHNode {
 export interface VChildren<A> {
   data: Array<A>,
   updatePair: VPair<Array<A>>,
-  mf: (_: A) => VHNode,
+  fprop: (_: A) => VProp,
+  mf: (_: VProp) => VHNode,
   forEach: (f: (_: VHNode) => void) => void
   update: (_: Array<A>) => void
 }
 
-export function vmap<A>(data: Array<A>, mf: (_: A) => VHNode): VChildren<A> {
+export function vmap<A>(data: Array<A>, mf: (_: A) => VHNode, 
+                        fprop: (_: A) => VProp = _ => _): VChildren<A> {
   return {
     data,
     updatePair: new VPair<Array<A>>([]),
+    fprop,
     mf,
     update: (_) => {},
     forEach: (_) => {}

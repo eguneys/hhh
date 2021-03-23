@@ -45,6 +45,33 @@ export default function attributes() {
 
   });
 
+  it.only('updates children with object props', () => {
+
+    let numbers = [1,2,3,4];
+
+    let v$numbers = vmap(numbers, () => 
+      vh('span', (digit: number) => ({digit}), {
+        klassList: ({ digit }) => [digit]
+      }));
+
+    let v$ = vh('div', { 
+      pos: 'children object props' }, {
+        klassList: ({pos}) => pos.split(' '),
+      }, [v$numbers]);
+    
+
+    elm = recons(v$);
+    qed('4 child', elm.children.length, 4)
+
+    v$numbers.update([3,4,5]);
+
+    qed('3 child', elm.children.length, 3);
+
+    v$numbers.forEach(_ => _.update(10));
+    console.log(elm);
+    
+  });
+
   it('adds vhnode children', () => {
 
     let v$span = vh('span', {}, {});
@@ -58,6 +85,23 @@ export default function attributes() {
 
     qed('1 child', elm.children.length, 1);
     console.log(elm);
+
+  });
+
+  it('preserves old props', () => {
+
+    let result: number[] = [];
+    let v$span = vh('span', {n: 3}, {
+      element: ({ n }) => (_: Node) => {
+        result.push(n);
+      }
+    });
+
+    elm = recons(v$span);
+
+    v$span.update({ a: 4});
+
+    qed('n', result, [3,3]);
 
   });
   
