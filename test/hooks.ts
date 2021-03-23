@@ -1,38 +1,27 @@
-import { it, qed, ok as yes } from 'tiqed';
+import { it, qed } from 'tiqed';
 import { h } from '../src/h';
-import { init } from '../src/init';
-import { CreateHook } from '../src/vnode';
+import { vinit } from '../src/vinit';
 
 
 export default function hooks() {
 
-  let reconcile = init();
+  let recons = vinit();
 
   it('hooks');
 
-  // it('calls hook on create', () => {
+  it('calls resize', () => {
 
-  //   let result = [];
+    let result = [];
+    let v$ = h('div', { resize: (bounds) => {
+      result.push(1);
+    } }, []);
 
-  //   const cb: CreateHook = (vnode) => {
-  //     yes(vnode.elm instanceof Element);
+    let $_ = recons(v$);
 
-  //     qed('ok', (vnode.elm as Element).children.length, 2);
-  //     qed('ok', vnode.elm?.parentNode === null, true);
-  //     result.push(vnode);
-  //   };
-
-  //   const vnode = h('div', [
-  //     h('div', { hook: { create: cb } }, [
-  //       h('span'),
-  //       h('span')
-  //     ])
-  //   ])
-  //   reconcile(vnode);
-
-  //   qed('called', result.length, 1);
-
-  // });
+    document.body.appendChild($_);
+    
+    // qed('calls on append', result.length, 1);
+  });
 
 
   

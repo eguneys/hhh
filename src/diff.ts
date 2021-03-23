@@ -4,13 +4,19 @@ export type Diff<A> = {
   still: A
 }
 
-export function array<A>(ls: Array<A>, ols: Array<A>): Diff<Array<A>> {
+function refEqual<A>(a: A, b: A): boolean {
+  return a === b;
+}
+
+export function array<A>(ls: Array<A>,
+                         ols: Array<A>,
+                         isEqual: (_: A, __: A) => boolean = refEqual): Diff<Array<A>> {
   let still = [],
   added = [],
   removed = [];
 
   for (let l of ls) {
-    if (ols.find(_ => _ === l)) {
+    if (ols.find(_ => isEqual(_, l))) {
       still.push(l);
     } else {
       added.push(l);
@@ -18,8 +24,8 @@ export function array<A>(ls: Array<A>, ols: Array<A>): Diff<Array<A>> {
   }
 
   for (let l of ols) {
-    if (!still.includes(l) &&
-      !added.includes(l)) {
+    if (!still.find(_ => isEqual(l, _)) &&
+      !added.find(_ => isEqual(l, _))) {
       removed.push(l);
     }
   }

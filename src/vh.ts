@@ -18,6 +18,7 @@ export type VUpdate<A> = (props: VProp) => A
 export type VProp = any
 
 export type VUpdates = {
+  resize?: (_: ClientRect) => void
   klassList?: VUpdate<KlassList>
   element?: VUpdate<VUpdateElement>
 }
@@ -41,43 +42,47 @@ export function isVHNode(_: VHNodeOrChildren): _ is VHNode {
 export interface VHNode {
   selOrText: Sel | Text,
   prop: VProp,
+  parentProp?: VProp,
   updates: VUpdates,
   updatePairs: VUpdatePairs,
   update: (_: VProp) => void,
+  updateParentProp: (_: VProp) => void,
   children: Array<VHNodeOrChildren>
 }
 
 export interface VChildren<A> {
   data: Array<A>,
   updatePair: VPair<Array<A>>,
-  fprop: (_: A) => VProp,
-  mf: (_: VProp) => VHNode,
-  forEach: (f: (_: VHNode) => void) => void
+  parentProp?: VProp,
+  mf: (_: VProp, __: VProp) => VHNode,
+  updateProp: (_: VProp) => void,
   update: (_: Array<A>) => void
 }
 
-export function vmap<A>(data: Array<A>, mf: (_: A) => VHNode, 
-                        fprop: (_: A) => VProp = _ => _): VChildren<A> {
+export function vmap<A>(data: Array<A>, mf: (_: A, __: VProp) => VHNode, parentProp?: VProp): VChildren<A> {
   return {
     data,
     updatePair: new VPair<Array<A>>([]),
-    fprop,
     mf,
+    parentProp,
     update: (_) => {},
-    forEach: (_) => {}
+    updateProp: (_) => {}
   }
 }
 
 export function vh(selOrText: Sel | Text, prop: VProp,
-                   updates: VUpdates, children: Array<VHNodeOrChildren> = []): VHNode {
+                   updates: VUpdates, children: Array<VHNodeOrChildren>,
+                   parentProp?: VProp): VHNode {
   return {
     selOrText,
     prop,
+    parentProp,
     updates,
     updatePairs: {
       klassList: new VPair<KlassList>([]),
     },
     update: (_) => {},
+    updateParentProp: (_) => {},
     children
   }
 }

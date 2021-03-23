@@ -11,11 +11,20 @@ export default function attributes() {
   it('updates class list', () => {
 
     let v$ = vh('div', { pos: 'hello world' }, {
-      klassList: ({pos}) => pos.split(' ') });
+      klassList: ({pos}) => pos.split(' ') }, []);
 
     elm = recons(v$);
     v$.update({pos: 'one world' });
     console.log(elm);
+  });
+
+  it('gets parent props', () => {
+    let v$ = vh('div', { pos: 'parent' }, {
+      klassList: ({pos, parentProp}) => [pos + parentProp] }, [], {
+        parentProp: 'parent'
+      });
+    elm = recons(v$);
+    console.log(elm);    
   });
 
   it('updates children', () => {
@@ -25,7 +34,7 @@ export default function attributes() {
     let v$numbers = vmap(numbers, (digit: number) =>
       vh('span', digit, {
         klassList: digit => [digit]
-      }));
+      }, []));
 
     let v$ = vh('div', { 
       pos: 'children world' }, {
@@ -40,19 +49,19 @@ export default function attributes() {
 
     qed('2 child', elm.children.length, 3);
 
-    v$numbers.forEach(_ => _.update(10));
-    console.log(elm);
-
   });
 
-  it.only('updates children with object props', () => {
+  it('updates children with object props', () => {
 
     let numbers = [1,2,3,4];
 
-    let v$numbers = vmap(numbers, () => 
-      vh('span', (digit: number) => ({digit}), {
+    let makeProps = (digit: number) => ({digit});
+    let numberProps = numbers.map(makeProps);
+
+    let v$numbers = vmap(numberProps, (props) => 
+      vh('span', props, {
         klassList: ({ digit }) => [digit]
-      }));
+      }, []));
 
     let v$ = vh('div', { 
       pos: 'children object props' }, {
@@ -63,18 +72,78 @@ export default function attributes() {
     elm = recons(v$);
     qed('4 child', elm.children.length, 4)
 
-    v$numbers.update([3,4,5]);
+    v$numbers.update([3,4,5].map(makeProps));
 
     qed('3 child', elm.children.length, 3);
-
-    v$numbers.forEach(_ => _.update(10));
-    console.log(elm);
     
+  });
+
+  it('update props after update parent prop', () => {
+
+    let numbers = [1,2,3,4];
+
+    let makeprops = (digit: number) => ({digit});
+    let numberprops = numbers.map(makeprops);
+    let parentProp = 'Parent';
+
+    let v$numbers = vmap(numberprops, (props, parentProps) => 
+      vh('span', props, {
+        klassList: ({ digit, parentProp }) => [parentProp + digit]
+      }, [], parentProps), {parentProp});
+
+    let v$ = vh('div', { 
+      pos: 'update props' }, {
+        klassList: ({pos}) => pos.split(' '),
+      }, [v$numbers]);
+    
+
+    elm = recons(v$);
+    qed('4 child', elm.children.length, 4)
+
+
+    v$numbers.updateProp({parentProp: 'updated' });
+
+    v$numbers.update([3,4,5].map(makeprops));
+
+    qed('3 child', elm.children.length, 3);
+    console.log(elm);
+  });
+
+
+  it.only('re-add removed child', () => {
+
+    let numbers = [1];
+
+    let makeprops = (digit: number) => ({digit});
+    let numberprops = numbers.map(makeprops);
+    let parentProp = 'Parent';
+
+    let v$numbers = vmap(numberprops, (props, parentProps) => 
+      vh('span', props, {
+        klassList: ({ digit, parentProp }) => [parentProp + digit]
+      }, [], parentProps), {parentProp});
+
+    let v$ = vh('div', { 
+      pos: 'update props' }, {
+        klassList: ({pos}) => pos.split(' '),
+      }, [v$numbers]);
+    
+
+    elm = recons(v$);
+    v$numbers.update([].map(makeprops));
+
+    v$numbers.updateProp({parentProp: 'updated' });
+
+    v$numbers.update([1].map(makeprops));
+
+    qed('parent prop updated', elm.firstChild.classList.contains('updated1'));
+    console.log(elm);
+
   });
 
   it('adds vhnode children', () => {
 
-    let v$span = vh('span', {}, {});
+    let v$span = vh('span', {}, {}, []);
 
     let v$ = vh('div', { 
       pos: 'vnode child' }, {
@@ -95,7 +164,7 @@ export default function attributes() {
       element: ({ n }) => (_: Node) => {
         result.push(n);
       }
-    });
+    }, []);
 
     elm = recons(v$span);
 

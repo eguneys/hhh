@@ -4,21 +4,34 @@ import * as vh from './vh';
 import * as diff from './diff';
 
 export function vinit() {
+
+  function shallowEqual<A>(a: A, b: A): boolean {
+    if (typeof a === 'object' && typeof b === 'object') {
+      for (let key in a) {
+        if (a[key] !== b[key]) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return a === b;
+    }
+  }
   
   // updateChildren(updatePair.add(data), mf, $d);
   function updateChildren<A>([arr,
                               oldArray]: [Array<A>, Array<A>], 
-                             mf: (_: A) => VHNode,
-                             fprop: (_: A) => VProp,
+                             mf: (_: A, __: VProp) => VHNode,
                              children: Map<VHNode, Node>,
+                             parentProp: VProp,
                              $parent: Node) {
 
-    let { added, removed, still } = diff.array(arr.map(fprop), oldArray.map(fprop));
+    let { added, removed, still } = diff.array(arr, oldArray, shallowEqual);
 
     let recycle: Array<VHNode> = [];
 
     removed.forEach((_: VProp) => {
-      let _$ = Array.from(children.keys()).find((_v$: VHNode) => _v$.prop === _);
+      let _$ = Array.from(children.keys()).find((_v$: VHNode) => shallowEqual(_v$.prop, _));
       if (_$) {
         recycle.push(_$);
       }
@@ -29,7 +42,7 @@ export function vinit() {
       if (v$) {
         v$.update(_);
       } else {
-        let newV$ = mf(_),
+        let newV$ = mf(_, parentProp),
         new$ = recons(newV$);
 
         $parent.appendChild(new$);
@@ -58,16 +71,19 @@ export function vinit() {
   }
 
   function updateVChildren<A>(children: VChildren<A>, $parent: Node) {
-    let { updatePair, mf, fprop, data } = children;
+    let { updatePair, mf, data, parentProp } = children;
 
     let cmap: Map<VHNode, Node> = new Map();
 
     children.update = (data) => {
-      updateChildren(updatePair.add(data), mf, fprop, cmap, $parent);
+      updateChildren(updatePair.add(data), mf, cmap, parentProp, $parent);
     }
 
-    children.forEach = (fn) => {
-      Array.from(cmap.keys()).forEach((_: VHNode) => fn(_));
+    children.updateProp = (prop) => {
+      parentProp = prop;
+      Array.from(cmap.keys()).forEach((_: VHNode) => {
+        _.updateParentProp(prop);
+      });
     };
 
     children.update(data);
@@ -106,14 +122,20 @@ export function vinit() {
       $d = api.createTextNode(selOrText.text);
     }
 
+    vh.updateParentProp = (prop: VProp) => {
+      vh.parentProp = prop;
+      vh.update(vh.prop);
+    };
 
     vh.update = (_prop: VProp) => {
-
-      vh.prop = propCombine(vh.prop, _prop);
-      updates.element?.(vh.prop)($d);
+      if (_prop) {
+        vh.prop = propCombine(vh.prop, _prop);
+      }
+      let withParentProp = vh.parentProp?propCombine(vh.parentProp, vh.prop): vh.prop;
+      updates.element?.(withParentProp)($d);
 
       if (updates.klassList) {
-        let pairs = updatePairs.klassList.add(updates.klassList(vh.prop));
+        let pairs = updatePairs.klassList.add(updates.klassList(withParentProp));
         updateKlassList(pairs, $d);
       }
     }
@@ -127,6 +149,13 @@ export function vinit() {
         updateVChildren(child, $d);
       }
     });
+    
+    if (updates.resize) {
+      let ur = updates.resize;
+      new ResizeObserver((e) => {
+        ur(($d as Element).getBoundingClientRect());
+      }).observe($d as Element);
+    }
   
     return $d;
   }

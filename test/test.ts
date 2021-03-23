@@ -10,8 +10,8 @@ import diff from './diff';
 
   tMo(core);
   tMo(attributes);
-  tMo(hooks);
-  tMo.only(vh);
+  tMo.only(hooks);
+  tMo(vh);
   tMo(diff);
 
   run();
