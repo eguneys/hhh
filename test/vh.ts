@@ -110,7 +110,7 @@ export default function attributes() {
   });
 
 
-  it.only('re-add removed child', () => {
+  it('re-add removed child', () => {
 
     let numbers = [1];
 
@@ -171,6 +171,25 @@ export default function attributes() {
     v$span.update({ a: 4});
 
     qed('n', result, [3,3]);
+
+  });
+
+  it.only('vmap different props', () => {
+    
+
+    let v$numbers = vmap([], (props, parentProps) => 
+      vh('span', props, {
+        klassList: ({ digit, parentProp }) => [parentProp + digit]
+      }, [], parentProps), parentProps);
+
+    let v$ = vh('div', { 
+      pos: 'update props' }, {
+        klassList: ({pos}) => pos.split(' '),
+      }, [v$numbers]);
+    
+
+    elm = recons(v$);
+    v$numbers.update([].map(makeprops));    
 
   });
   
