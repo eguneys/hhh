@@ -1,4 +1,5 @@
-import { VHNode, VChildren, VProp, isVHNode } from './vh';
+import { VEx, isVEx } from './vex';
+import { VHNode, VChildren, VProp, isVHNode, AttrList } from './vh';
 import { htmlDomApi, DOMAPI } from './htmldomapi';
 import * as vh from './vh';
 import * as diff from './diff';
@@ -59,6 +60,18 @@ export function vinit() {
     });
   }
 
+  function updateAttrList([attrList, 
+                           oldAttrList]: [AttrList, AttrList],
+                          elm: Node) {
+    let $_: Element = elm as Element;
+    for (let attr in oldAttrList) {
+      $_.removeAttribute(attr);
+    }
+    for (let attr in attrList) {
+      $_.setAttribute(attr, attrList[attr]);
+    }
+  }
+
 
   function updateKlassList([klassList, 
                             oldKlassList]: [Array<string>, Array<string>],
@@ -90,10 +103,22 @@ export function vinit() {
   }
 
   function updateVHNodeChild(child: VHNode, $parent: Node) {
-    
     let $_ = recons(child);
     $parent.appendChild($_);
+  }
 
+  function updateVExChild(child: VEx, $parent: Node) {
+    let { children } = child;
+
+    let $s: Array<Node> = [];
+
+    child.replace = (children => {
+      $s.forEach(_ => $parent.removeChild(_));
+      $s = children.map(_ => recons(_));
+      $s.forEach(_ => $parent.appendChild(_));
+    });
+
+    child.replace(children);
   }
 
   function propCombine(oprop: VProp, prop: VProp): VProp {
@@ -138,6 +163,11 @@ export function vinit() {
         let pairs = updatePairs.klassList.add(updates.klassList(withParentProp));
         updateKlassList(pairs, $d);
       }
+
+      if (updates.attrs) {
+        let pairs = updatePairs.attrs.add(updates.attrs(withParentProp));
+        updateAttrList(pairs, $d);
+      }
     }
 
     vh.update(prop);
@@ -145,6 +175,8 @@ export function vinit() {
     children.forEach(child => {
       if (isVHNode(child)) {
         updateVHNodeChild(child, $d);
+      } else if (isVEx(child)) {
+        updateVExChild(child, $d);
       } else {
         updateVChildren(child, $d);
       }
@@ -153,7 +185,7 @@ export function vinit() {
     if (updates.resize) {
       let ur = updates.resize;
       new ResizeObserver((e) => {
-        ur(($d as Element).getBoundingClientRect());
+        ur(($d as Element).getBoundingClientRect(), $d);
       }).observe($d as Element);
     }
   

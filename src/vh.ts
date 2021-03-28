@@ -1,3 +1,5 @@
+import { VHCEx } from './vex';
+
 export class VPair<A> {
   oldUpdate: A
   constructor(oldUpdate: A) {
@@ -13,18 +15,23 @@ export class VPair<A> {
 
 export type VUpdateElement = (elm: Node) => void
 export type KlassList = Array<string>
+export type AttrList = {
+  [key: string]: string
+}
 
 export type VUpdate<A> = (props: VProp) => A
 export type VProp = any
 
 export type VUpdates = {
-  resize?: (_: ClientRect) => void
-  klassList?: VUpdate<KlassList>
+  resize?: (_: ClientRect, _$: Node) => void,
+  klassList?: VUpdate<KlassList>,
+  attrs?: VUpdate<AttrList>,
   element?: VUpdate<VUpdateElement>
 }
 
 export type VUpdatePairs = {
   klassList: VPair<KlassList>
+  attrs: VPair<AttrList>
 }
 
 export type Sel = string
@@ -33,9 +40,7 @@ export type Text = {
   text: string
 };
 
-export type VHNodeOrChildren = VHNode | VChildren<any>
-
-export function isVHNode(_: VHNodeOrChildren): _ is VHNode {
+export function isVHNode(_: VHCEx): _ is VHNode {
   return ((_ as VHNode).selOrText !== undefined);
 }
 
@@ -47,7 +52,7 @@ export interface VHNode {
   updatePairs: VUpdatePairs,
   update: (_: VProp) => void,
   updateParentProp: (_: VProp) => void,
-  children: Array<VHNodeOrChildren>
+  children: Array<VHCEx>
 }
 
 export interface VChildren<A> {
@@ -71,7 +76,7 @@ export function vmap<A>(data: Array<A>, mf: (_: A, __: VProp) => VHNode, parentP
 }
 
 export function vh(selOrText: Sel | Text, prop: VProp,
-                   updates: VUpdates, children: Array<VHNodeOrChildren>,
+                   updates: VUpdates, children: Array<VHCEx>,
                    parentProp?: VProp): VHNode {
   return {
     selOrText,
@@ -80,6 +85,7 @@ export function vh(selOrText: Sel | Text, prop: VProp,
     updates,
     updatePairs: {
       klassList: new VPair<KlassList>([]),
+      attrs: new VPair<AttrList>({})
     },
     update: (_) => {},
     updateParentProp: (_) => {},

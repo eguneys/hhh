@@ -173,24 +173,5 @@ export default function attributes() {
     qed('n', result, [3,3]);
 
   });
-
-  it.only('vmap different props', () => {
-    
-
-    let v$numbers = vmap([], (props, parentProps) => 
-      vh('span', props, {
-        klassList: ({ digit, parentProp }) => [parentProp + digit]
-      }, [], parentProps), parentProps);
-
-    let v$ = vh('div', { 
-      pos: 'update props' }, {
-        klassList: ({pos}) => pos.split(' '),
-      }, [v$numbers]);
-    
-
-    elm = recons(v$);
-    v$numbers.update([].map(makeprops));    
-
-  });
   
 }

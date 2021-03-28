@@ -1,21 +1,21 @@
 import { qed, it } from 'tiqed';
-import { VNode } from '../src/vnode';
-import { h } from '../src/h';
-import { init } from '../src/init';
+import { vh } from '../src/vh';
+import { vinit } from '../src/vinit';
 
 export default function attributes() {
 
-  let reconcile = init();
+  let reconcile = vinit();
   let elm: any;
 
+  it('have their provided values', () => {
 
-  // it('have their provided values', () => {
+    let vnode = vh('div', { }, {
+      attrs: (props) => ({ href: '/foo', selected: 'selected' })
+    }, []);
 
-  //   let vnode = h('div', { attrs: { href: '/foo', selected: true } });
+    elm = reconcile(vnode);
 
-  //   elm = reconcile(vnode);
-
-  //   qed('attr href: /foo', elm.getAttribute('href'), '/foo');
-  // });
+    qed('attr href: /foo', elm.getAttribute('href'), '/foo');
+  });
   
 }

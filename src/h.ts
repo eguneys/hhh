@@ -1,23 +1,23 @@
 import * as is from './is';
+import { VHCEx } from './vex';
 import { vh,
-         VHNodeOrChildren,
          VUpdates,
          VHNode, 
          Text, 
          Sel,
          VProp } from './vh';
 
-export type VHNodeOrChildrenOrText = VHNodeOrChildren | string
+export type VHCExOrText = VHCEx | string
 
 export function h(sel: string): VHNode
 // export function h(sel: string, data: Maybe<VNodeData>): VNode
-export function h(sel: string, children: Array<VHNodeOrChildrenOrText> | string): VHNode
-export function h(sel: string, data: VUpdates, children: Array<VHNodeOrChildrenOrText>): VHNode
+export function h(sel: string, children: Array<VHCExOrText> | string): VHNode
+export function h(sel: string, data: VUpdates, children: Array<VHCExOrText>): VHNode
 export function h(sel: Sel, b?: any, c?: any): VHNode {
 
   let data: VUpdates = {}
   let prop: VProp
-  let textOrChildren: Array<VHNodeOrChildrenOrText> | string | undefined
+  let textOrChildren: Array<VHCExOrText> | string | undefined
   let i: number
 
   if (c !== undefined) {
